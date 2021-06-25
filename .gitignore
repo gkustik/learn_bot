@@ -2,6 +2,6 @@ settings.py
 *.log
 .vscode/
 .idea/
-env/
+envbot/
 .DS_Store
 __pycache__/
