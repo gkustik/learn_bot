@@ -1,3 +1,4 @@
+from emoji import emojize
 from glob import glob
 import logging
 import ephem
@@ -12,13 +13,23 @@ import settings
 logging.basicConfig(filename='bot.log', level=logging.INFO)
 
 def greet_user(update, context):
-    print('Вызван /start')
-    update.message.reply_text("Здравствуй, пользователь!")
+    context.user_data['emoji'] = get_smile(context.user_data)
+    update.message.reply_text(f"Здравствуй, пользователь {context.user_data['emoji']}!")
 
 def talk_to_me(update, context):
+    context.user_data['emoji'] = get_smile(context.user_data)
+    username = update.effective_user.first_name
     text = update.message.text
-    print(text)
-    update.message.reply_text(text)
+    update.message.reply_text(f"Здравствуй, {username} {context.user_data['emoji']}! Ты написал: {text}")
+
+
+
+def get_smile(user_data):
+    if 'emoji' not in user_data:
+        smile = choice(settings.USER_EMOJI) 
+        return emojize(smile, use_aliases=True)
+    return user_data['emoji']
+
 
 def planet(update, context):
     print('Вызвана /planet')  
@@ -79,15 +90,15 @@ def guess_number(update, context):
 
 def send_cat_picture(update, context):
     cat_photos_list = glob('images/cat*.jp*g')
-    cat_pic_filename = choice(cat_photos_list)
-    print(cat_pic_filename)
+    cat_filename = choice(cat_photos_list)
     chat_id = update.effective_chat.id
-    context.bot.send_photo(chat_id=chat_id, photo=open(cat_pic_filename, 'rb'))
+    context.bot.send_photo(chat_id=chat_id, photo=open(cat_filename,'rb'))
+    #update.message.reply_photo(photo=open(cat_filename,'rb'))
 
 
 def main():
     mybot = Updater(settings.API_KEY, use_context=True)
-
+    
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
     dp.add_handler(CommandHandler("guess", guess_number))

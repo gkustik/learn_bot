@@ -1,2 +1,7 @@
-from glob import glob
-print(glob('images/*'))
+class Planet():
+    def say(self, name, date):
+        self.name = name.strip
+        self.date = date
+
+planet1 = Planet('Earth', "20.04.1988")
+print (planet1)
