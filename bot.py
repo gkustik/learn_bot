@@ -33,35 +33,43 @@ def get_smile(user_data):
 
 def planet(update, context):
     print('Вызвана /planet')  
-    text_planet = update.message.text
+    text_planet = update.message.text # объект update в нем атрибут message и взяли там текст
     planet_name = list(text_planet.split())[1] #получить имя планеты с помощью split
     today_date = datetime.now() #получить сегодняшнюю дату с помощью datetime
-    if planet_name == 'Mars': #ввели корректно Марс, то
-        planet = ephem.Mars(today_date)
+    # getattr(ephem, planet_name) - функция возвращает атрибут planet_name из коробки ephem == ephem.Mars
+    # getattr(ephem, planet_name)(today_date)
+    try:
+        planet = getattr(ephem, planet_name)(today_date)
         const = ephem.constellation(planet)
-    elif planet_name == 'Mercury':
-        planet = ephem.Mercury(today_date)
-        const = ephem.constellation(planet)
-    elif planet_name == 'Venus':
-        planet = ephem.Mercury(today_date)
-        const = ephem.constellation(planet)
-    elif planet_name == 'Jupiter':
-        planet = ephem.Jupiter(today_date)
-        const = ephem.constellation(planet)
-    elif planet_name == 'Saturn':
-        planet = ephem.Saturn(today_date)
-        const = ephem.constellation(planet)
-    elif planet_name == 'Uranus':
-        planet = ephem.Uranus(today_date)
-        const = ephem.constellation(planet)
-    elif planet_name == 'Neptune':
-        planet = ephem.Neptune(today_date)
-        const = ephem.constellation(planet)
-    elif planet_name == 'Pluto':
-        planet = ephem.Pluto(today_date)
-        const = ephem.constellation(planet)
-    else:
+    except:
         const = 'Попробуй еще раз'
+
+    # if planet_name == 'Mars': #ввели корректно Марс, то
+    #     planet = ephem.Mars(today_date)
+    #     const = ephem.constellation(planet)
+    # elif planet_name == 'Mercury':
+    #     planet = ephem.Mercury(today_date)
+    #     const = ephem.constellation(planet)
+    # elif planet_name == 'Venus':
+    #     planet = ephem.Mercury(today_date)
+    #     const = ephem.constellation(planet)
+    # elif planet_name == 'Jupiter':
+    #     planet = ephem.Jupiter(today_date)
+    #     const = ephem.constellation(planet)
+    # elif planet_name == 'Saturn':
+    #     planet = ephem.Saturn(today_date)
+    #     const = ephem.constellation(planet)
+    # elif planet_name == 'Uranus':
+    #     planet = ephem.Uranus(today_date)
+    #     const = ephem.constellation(planet)
+    # elif planet_name == 'Neptune':
+    #     planet = ephem.Neptune(today_date)
+    #     const = ephem.constellation(planet)
+    # elif planet_name == 'Pluto':
+    #     planet = ephem.Pluto(today_date)
+    #     const = ephem.constellation(planet)
+    # else:
+    #     const = 'Попробуй еще раз'
     update.message.reply_text(const)
 
 
@@ -102,9 +110,10 @@ def main():
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
     dp.add_handler(CommandHandler("guess", guess_number))
-    dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     dp.add_handler(CommandHandler('cat', send_cat_picture))
     dp.add_handler(CommandHandler('planet', planet))
+    dp.add_handler(MessageHandler(Filters.text, talk_to_me))
+   
     
     logging.info("Бот стартовал")
     mybot.start_polling()
