@@ -1,7 +1,7 @@
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
-from handlers import (greet_user, guess_number, send_cat_picture, user_coordinates, talk_to_me, planet)
+from handlers import (greet_user, guess_number, send_cat_picture, user_coordinates, talk_to_me, planet, check_user_photo)
 
 import settings
 
@@ -16,6 +16,7 @@ def main():
     dp.add_handler(CommandHandler('cat', send_cat_picture))
     dp.add_handler(CommandHandler('planet', planet))
     dp.add_handler(MessageHandler(Filters.regex('^(Прислать котика)$'), send_cat_picture))
+    dp.add_handler(MessageHandler(Filters.photo, check_user_photo))
     dp.add_handler(MessageHandler(Filters.location, user_coordinates))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
    

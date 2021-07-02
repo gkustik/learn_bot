@@ -12,9 +12,8 @@
 2. Создайте виртуальное окружение
 3. Установить зависимости "pip install -r requirements.txt"
 4. Создайте файл "settings.py"
-5. Dgbibnt  в setting.py gthtvtyyst:
-
-API_KEY = "API-ключ бота"
-USER_EMOJI = [':smiley_cat:', ':smiling_imp:', ':panda_face:', ':dog:']
+5. Впишите в setting.py переменные:
+    API_KEY = "API-ключ бота"
+    USER_EMOJI = [':smiley_cat:', ':smiling_imp:', ':panda_face:', ':dog:']
 
 6. Запустите файл bot.py
