@@ -1,4 +1,6 @@
-from clarifai.rest import ClarifaiApp
+from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
+from clarifai_grpc.grpc.api import service_pb2_grpc
+
 from emoji import emojize
 from telegram import ReplyKeyboardMarkup, KeyboardButton
 from telegram.utils.request import Request
@@ -24,14 +26,15 @@ def play_random_numbers(user_number):
     return message
 
 def main_keyboard(): # такое написание функции означает, что она ничего не принимает
-    return ReplyKeyboardMarkup([['Прислать котика', 'Тест', KeyboardButton('Мои координаты', request_location = True)]], resize_keyboard=True)
+    return ReplyKeyboardMarkup([
+        ['Прислать котика', 'Заполнить анкету', KeyboardButton('Мои координаты', request_location = True)]], resize_keyboard=True)
 
 def is_cat(file_name):
     app = ClarifaiApp(api_key=settings.CLARIFAI_API_KEY)
     model = app.public_models.general_model
-    response = model.predict_by_filename(file_name, max_concepts=5)
-    if response['status']['code'] == 10000:
-        for concept in response['outputs'][0]['data']['concepts']:
+    responce = model.predict_by_filename(file_name, max_concepts=5)
+    if responce['status']['code'] == 10000:
+        for concept in responce['outputs'][0]['data']['concepts']:
             if concept['name'] == 'cat':
                 return True
     return False
