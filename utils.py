@@ -1,33 +1,24 @@
 from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
 from clarifai_grpc.grpc.api import service_pb2_grpc
-
-from emoji import emojize
+from random import randint
 from telegram import ReplyKeyboardMarkup, KeyboardButton
-from telegram.utils.request import Request
-from random import choice, randint
-from pprint import PrettyPrinter
 
 import settings
 
-def get_smile(user_data):
-    if 'emoji' not in user_data:
-        smile = choice(settings.USER_EMOJI) 
-        return emojize(smile, use_aliases=True)
-    return user_data['emoji']
-
 def play_random_numbers(user_number):
-    bot_number = randint(user_number -10, user_number +10)
+    bot_number = randint(user_number - 10, user_number + 10)
     if user_number > bot_number:
-        message = f"Ты загадал {user_number}, я загадал {bot_number}, ты выиграл!"
+        message = f"Ваше число {user_number}, мое {bot_number}, вы выиграли"
     elif user_number == bot_number:
-        message = f"Ты загадал {user_number}, я загадал {bot_number}, ничья!"
+        message = f"Ваше число {user_number}, мое {bot_number}, ничья"
     else:
-        message = f"Ты загадал {user_number}, я загадал {bot_number}, я выиграл!"
+        message = f"Ваше число {user_number}, мое {bot_number}, вы проиграли"
     return message
 
-def main_keyboard(): # такое написание функции означает, что она ничего не принимает
+def main_keyboard():
     return ReplyKeyboardMarkup([
-        ['Прислать котика', 'Заполнить анкету', KeyboardButton('Мои координаты', request_location = True)]], resize_keyboard=True)
+        ['Прислать котика', KeyboardButton('Мои координаты', request_location=True), 'Заполнить анкету']
+    ])
 
 def is_cat(file_name):
     app = ClarifaiApp(api_key=settings.CLARIFAI_API_KEY)
